@@ -37,6 +37,7 @@
 #include "logic/VlycPlayer.h"
 #include "logic/PlaylistModel.h"
 #include "logic/PlaylistNode.h"
+#include "logic/Hotkeys.h"
 
 #ifdef Q_OS_LINUX
 #include "vlyc_xcb.h"
@@ -83,6 +84,8 @@ MainWindow::MainWindow(VlycApp *self) :
     ui->video->installEventFilter(this);
 
     ui->treeView->setModel(&self->player()->model());
+
+    m_hotkeyMgr = new HotkeyManager(self, this);
 
     connectUiMisc();
 
@@ -225,21 +228,8 @@ void MainWindow::connectUiMisc()
     connect(fsc->ui->volume, &SoundWidget::muteChanged, &m_player_audio, &VlcMediaPlayerAudio::setMuted);
     connect(fsc->ui->btn_defullscreen, &QAbstractButton::clicked, [=] () {setFullScreen(false);});
 
-    // Shortcuts
-    shortcut_Space = new QShortcut(QKeySequence(" "), ui->video);
-    connect(shortcut_Space, &QShortcut::activated, &m_player, &VlcMediaPlayer::togglePause);
-
-    shortcut_F11 = new QShortcut(QKeySequence("F11"), ui->video);
-    connect(shortcut_F11, &QShortcut::activated, this, &MainWindow::toggleFullScreen);
-
-    shortcut_AltReturn = new QShortcut(QKeySequence("Alt + Return"), ui->video);
-    connect(shortcut_AltReturn, &QShortcut::activated, this, &MainWindow::toggleFullScreen);
-
-    shortcut_Esc = new QShortcut(QKeySequence("Esc"), ui->video);
-    connect(shortcut_Esc, &QShortcut::activated, [=] () {setFullScreen(false);});
-
-    shortcut_n = new QShortcut(QKeySequence("N"), ui->video);
-    connect(shortcut_n, &QShortcut::activated, mp_self->player(), &VlycPlayer::next);
+    // Bind hotkeys.
+    m_hotkeyMgr->bindHotkeys();
 }
 
 void MainWindow::on_btn_play_clicked()

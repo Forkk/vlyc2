@@ -44,6 +44,8 @@ class VlcMedia;
 class VlcMediaPlayer;
 class VlycApp;
 
+class HotkeyManager;
+
 using namespace Vlyc::Result;
 
 class MainWindow : public QMainWindow
@@ -113,11 +115,7 @@ private:
     VlcMediaPlayerAudio m_player_audio;
     VlcMediaPlayerVideo m_player_video;
 
-    QShortcut *shortcut_Space;
-    QShortcut *shortcut_Esc;
-    QShortcut *shortcut_F11;
-    QShortcut *shortcut_AltReturn;
-    QShortcut *shortcut_n;
+    HotkeyManager *m_hotkeyMgr;
 
     QRect m_geometry;
 
