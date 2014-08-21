@@ -49,6 +49,7 @@ SET(VLYC_HEADERS
 	network/simplefilecookiejar.h
 	network/networkaccessmanager.h
 
+    logic/VlycDBus.h
 	logic/VlycPlayer.h
 	logic/TempEventLoop.h
 	logic/PlaylistNode.h
@@ -75,6 +76,7 @@ SET(VLYC_SOURCES
 	network/simplefilecookiejar.cpp
 	network/networkaccessmanager.cpp
 
+    logic/VlycDBus.cpp
 	logic/VlycPlayer.cpp
 	logic/TempEventLoop.cpp
 	logic/PlaylistNode.cpp
@@ -113,6 +115,6 @@ ENDIF()
 ADD_EXECUTABLE(vlyc2 ${VLYC_SOURCES} ${VLYC_HEADERS} ${VLYC_UI} ${VLYC_QRC} ${VLYC_BROWSER})
 
 # Link
-QT5_USE_MODULES(vlyc2 Core Gui Widgets Network WebKit WebKitWidgets)
+QT5_USE_MODULES(vlyc2 Core Gui Widgets Network WebKit WebKitWidgets DBus)
 TARGET_LINK_LIBRARIES(vlyc2 libvlyc2 ${QtVlc_LIBRARIES} ${QtVlcWidgets_LIBRARIES} ${VLYC_EXTRA_LIBS})
 

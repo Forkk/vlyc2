@@ -32,6 +32,7 @@
 #include "logic/TempEventLoop.h"
 #include "logic/__lv_hacks.h"
 #include "logic/VlycPlayer.h"
+#include "logic/VlycDBus.h"
 
 #if   defined(Q_OS_WIN)
 #   define LIBRARY_EXT ".dll"
@@ -46,7 +47,8 @@ VlycApp::VlycApp(QObject *parent) :
     mp_plugins(new Vlyc::PluginManager()),
     mp_network(new NetworkAccessManager(this)),
     mp_player(new VlycPlayer(this)),
-    mp_window(new MainWindow(this))
+    mp_window(new MainWindow(this)),
+    mp_dbus(new VlycDBus(this))
 {
     mp_plugins->setPrivateInterface((void*)this);
     mp_plugins->setPublicInterface(new Vlyc::PluginInterface(this));
@@ -84,6 +86,11 @@ QNetworkAccessManager *VlycApp::network() const
 VlycPlayer *VlycApp::player() const
 {
     return mp_player;
+}
+
+VlycDBus *VlycApp::dbus() const
+{
+    return mp_dbus;
 }
 
 Vlyc::Result::ResultPtr VlycApp::handleUrl(const QUrl &url)

@@ -22,6 +22,7 @@
 #include <iostream>
 
 #include "vlyc.h"
+#include "logic/VlycDBus.h"
 #include "gui/mainwindow.h"
 #include "util/cmdparser.h"
 
@@ -94,6 +95,30 @@ int main(int argc, char** argv)
 
     VlycApp vlyc;
 
+    QString mrl = args["mrl"].toString();
+    if (mrl.startsWith("vlyc:"))
+        mrl = mrl.mid(5);
+
+    // Initialize the DBus connection.
+    // TODO: Command line argument to disable this.
+    if (!vlyc.dbus()->tryRegister())
+    {
+        // If another process is running and we've got a URL to play, connect
+        // to it and tell it to play the URL.
+        if (vlyc.dbus()->alreadyRunning() && !mrl.isEmpty())
+        {
+            printf("Sending URL to existing Vlyc instance.\n");
+            vlyc.dbus()->playRunning(mrl);
+            return 0;
+        }
+        else
+        {
+            fprintf(stderr, "Failed to register DBus service.\n");
+            return 1;
+        }
+    }
+
+
     app.setProperty("vlyc", QVariant::fromValue((QObject*)&vlyc));
 
     if (!args["proxy"].toString().isNull())
@@ -118,8 +143,8 @@ int main(int argc, char** argv)
 
     vlyc.window()->show();
 
-    if (!args["mrl"].toString().isNull())
-        QMetaObject::invokeMethod(&vlyc, "play", Qt::QueuedConnection, Q_ARG(QUrl, args["mrl"].toString()));
+    if (!mrl.isEmpty())
+        QMetaObject::invokeMethod(&vlyc, "play", Qt::QueuedConnection, Q_ARG(QUrl, mrl));
 
     return app.exec();
 }

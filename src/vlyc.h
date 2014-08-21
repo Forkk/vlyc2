@@ -19,17 +19,18 @@
 #ifndef VLYC_H
 #define VLYC_H
 
+#include <functional>
+
 #include <QObject>
 #include <QUrl>
 
 #include <VlycResult/Result.h>
 
-#include <functional>
-
 class MainWindow;
 class NetworkAccessManager;
 class QNetworkAccessManager;
 class VlycPlayer;
+class VlycDBus;
 
 namespace Vlyc {
 class PluginManager;
@@ -46,6 +47,7 @@ public:
     Vlyc::PluginManager *plugins() const;
     QNetworkAccessManager *network() const;
     VlycPlayer *player() const;
+    VlycDBus *dbus() const;
 
     virtual ~VlycApp();
 
@@ -60,6 +62,7 @@ private:
     Vlyc::PluginManager *mp_plugins;
     NetworkAccessManager *mp_network;
     VlycPlayer *mp_player;
+    VlycDBus *mp_dbus;
     MainWindow *mp_window;
 };
 
