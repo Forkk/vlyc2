@@ -22,6 +22,8 @@
 #include "gui/mainwindow.h"
 #include "logic/VlycPlayer.h"
 
+#include <QtCore/QCoreApplication>
+
 HotkeyManager::HotkeyManager(VlycApp *app, MainWindow *parent)
     : QObject(parent)
     , m_player(app->player()->player())
@@ -95,6 +97,10 @@ void HotkeyManager::bindHotkeys()
     // Fullscreen
     HOTKEY(hkToggleFull, "ToggleFullscreen", "Alt+Return",
            m_window, &MainWindow::toggleFullScreen);
+
+    // Quit
+    HOTKEY(hkQuit, "QuitHotkey", "Ctrl+Q",
+           QCoreApplication::instance(), &QCoreApplication::quit);
 }
 
 void HotkeyManager::clearHotkeys()
